@@ -1,6 +1,6 @@
 # rover_motors.py
 from smbus2 import SMBus
-import time
+import time##
 
 # ---------- Konfiguration ----------
 GROVEPI_PORT = "I2C-1"   # Port am GrovePi, in dem der Motortreiber steckt (I2C-1, I2C-2 oder I2C-3)
