@@ -33,7 +33,7 @@ selbst. Ohne seconds faehrt er weiter, bis du einen neuen Befehl gibst.
     rover.stop()                    # alle Motoren aus
 
     rover.drive(60, 30)             # linke Seite 60, rechte Seite 30
-                                    # -> faehrt eine Linkskurve
+                                    # -> faehrt eine Rechtskurve
     rover.drive(-50, 50)            # negative Zahl = diese Seite rueckwaerts
     rover.drive(60, 30, seconds=2)
 
