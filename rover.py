@@ -22,7 +22,9 @@ USER GUIDE
 Tempo immer von 0 bis 100.
 100 = schnellstes ERLAUBTES Tempo (siehe max_speed), nicht volle Akku-Spannung.
 seconds ist optional: mit seconds faehrt der Rover so lange und stoppt dann
-selbst. Ohne seconds faehrt er weiter, bis du einen neuen Befehl gibst.
+selbst. Ohne seconds faehrt er weiter, bis ein neuer Befehl kommt ODER
+main.py zu Ende ist (dann stoppen die Motoren sofort!). Darum am Schluss
+immer seconds=... oder rover.wait(...) benutzen.
 
     rover.forward(50)               # vorwaerts mit Tempo 50, faehrt weiter
     rover.forward(50, seconds=2)    # 2 Sekunden vorwaerts, dann Stopp
