@@ -18,3 +18,6 @@
 5. **Wheel hub design and CAD** (Fusion). Leg sketch in progress.
 6. Second motor driver: only board no. 2 (0x0F) is confirmed working; a second working board/address
    is needed for 4 motors.
+7. Check I2C addresses on the Pi (`i2cdetect -y 1`): PWM board (expected 0x7F), GrovePi (0x04).
+   Check whether the `grovepi` library is installed. Calibrate servo pulse range (`min_us`/`max_us`) per servo.
+8. Exact model of the 10 kg·cm servo (MG996R is only mentioned in earlier chats, not confirmed).
