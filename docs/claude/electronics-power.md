@@ -1,0 +1,27 @@
+# Electronics and power
+
+## Electronics list (NOT fully verified yet – double-check with Alan)
+- Raspberry Pi 4 + GrovePi.
+- Grove I2C Motor Driver v1.3 boards: 4 on hand, DIP switches for addresses, 2 needed for 4 motors.
+  - Boards are numbered with stickers.
+  - **Board no. 3 hangs the I2C bus** (even with a different cable) → don't use it.
+  - **Board no. 2 works** (address 0x0F).
+- Grove 16-channel PWM driver (PCA9685) for servos.
+- Grove 8-channel I2C hub (TCA9548A). (Alan doesn't remember why he ordered it.)
+- Planned sensors: 2–3 ultrasonic, 2–3 temperature. Also has an M5Stack NCIR (infrared temperature) unit.
+- Servos: 2.
+  - Reely S-0060 MG: analog, metal gears, about 6 kg·cm stall, 180° positional.
+  - Newer one rated 10 kg·cm – exact model to be confirmed (earlier chats mention MG996R servos labelled 10 kg/cm).
+  - With tank steering, servos would only be used for wheel lifting (see open-questions.md).
+
+## Power
+- **Pi:** its own small powerbank (small MagSafe or borrowed mini powerbank), must deliver 5 V / 3 A over USB-C.
+  The 50,000 mAh powerbank (Tank Lite W5001) is out because of its weight.
+- **Motors: NOT decided yet.** Decide once everything is discussed and understood.
+  - Option A: Amewi Li-Ion pack, 7.4 V, 1200 mAh, 8.88 Wh (borrowed from a friend; red plug + white balance lead).
+    Last decision was this pack, because its connector works with Dupont pins. Full charge about 8.4 V.
+    (Friend's packs are rated 5C.)
+  - Option B: soldered 2×AA holder packs (3 in series per string, about 6 AA total) with an on/off switch or connector.
+- Motors are rated 4.5 V → with 7.4–9 V, limit PWM (roughly 55–70% duty, depending on the driver's
+  voltage drop) to avoid overheating and wear. In code: `max_speed=60` default in `rover.py`.
+- Fuses: glass fuses 4 A and 8 A on hand, **no fuse holder yet**.
