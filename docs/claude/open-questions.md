@@ -18,6 +18,11 @@
 5. **Wheel hub design and CAD** (Fusion). Leg sketch in progress.
 6. Second motor driver: only board no. 2 (0x0F) is confirmed working; a second working board/address
    is needed for 4 motors.
-7. Check I2C addresses on the Pi (`i2cdetect -y 1`): PWM board (expected 0x7F), GrovePi (0x04).
+7. I2C scan 2026-11-10 (`i2cdetect -y -a 1`): **04** (GrovePi), **0f** (motor driver no. 2), **70** (probably the
+   TCA9548A hub). **7f missing** → PWM board not seen (plugged in? different address?).
    Check whether the `grovepi` library is installed. Calibrate servo pulse range (`min_us`/`max_us`) per servo.
 8. Exact model of the 10 kg·cm servo (MG996R is only mentioned in earlier chats, not confirmed).
+9. **Motors don't turn (2026-11-10)** although driver 0x0F answers on I2C. Not yet known why. To check: battery on the
+   driver's power terminal, IN1–IN4 LEDs, `motortest.py` at 60–80 %, motor directly on a battery. Note: speed 50 with
+   `max_speed=60` is only 30 % duty (76/255) – may be too little to start (estimate, not measured).
+   Earlier the scan showed no 0x0F at all; what fixed that is not recorded yet.

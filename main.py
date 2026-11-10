@@ -18,7 +18,7 @@ rover.forward(50, 50)     # nur Motor 1 (J1) dreht, Motor 2 (J5) steht
 
 while True:
     try:
-        value = ultrasonicRead(sound_sensor)##
+        value = ultrasonicRead(distance_middle_USS)##
         print("Disnanz ca. = %d cm" %value)
         sleep(.5)
     except KeyboardInterrupt:

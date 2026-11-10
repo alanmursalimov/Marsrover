@@ -40,6 +40,21 @@ immer seconds=... oder rover.wait(...) benutzen.
     rover.drive(60, 30, seconds=2)
 
 
+2b. EINZELNE MOTOREN
+--------------------
+Du waehlst Treiber (Adresse) und Klemme ("J1" oder "J5") selber.
+Die anderen Motoren bleiben dabei, wie sie sind.
+
+    m = rover.motor(0x0F, "J1")     # Motor an Treiber 0x0F, Klemme J1
+    m.speed(50)                     # vorwaerts mit Tempo 50, laeuft weiter
+    m.speed(-50, seconds=2)         # 2 Sekunden rueckwaerts, dann Stopp
+    m.stop()                        # nur diesen Motor aus
+
+    hinten_rechts = rover.motor(0x0E, "J5", invert=True)  # dreht falsch herum
+
+Der Treiber muss bei Rover(...) bekannt sein (addresses oder left/right).
+
+
 3. WARTEN
 ---------
 
@@ -72,6 +87,14 @@ Der Auto-Pull-Dienst hat keine Tastatur, dort wird wasd() uebersprungen.
         swap_sides=False,     # True = J1 ist RECHTS und J5 ist LINKS
         grovepi_address=0x04, # I2C-Adresse des GrovePi (Standard 0x04)
     )
+
+    # Selber festlegen, welcher Motor zu welcher Seite gehoert
+    # (Treiber-Adresse, Klemme). Dann braucht es addresses nicht:
+    rover = Rover(
+        left=[(0x0F, "J1"), (0x0E, "J1")],
+        right=[(0x0F, "J5"), (0x0E, "J5")],
+    )
+    # Ohne left/right gilt die Konvention unten (J1 links, J5 rechts).
 
     # Nur Sensoren/Servos testen, ohne Motortreiber:
     rover = Rover(addresses=[])
@@ -147,6 +170,13 @@ wieder kleiner machen!
 
 9. FEHLER
 ---------
+Motoren drehen nicht (Treiber antwortet aber)
+    -> motortest.py starten (testet den Treiber ohne diese Library):
+           sudo systemctl stop marsrover
+           python3 ~/Marsrover/motortest.py
+       Akku an der Strom-Klemme des Treibers? Leuchten die LEDs IN1-IN4?
+       Tempo 50 ist bei max_speed=60 nur 30 % der Akkuspannung - evtl.
+       zu wenig zum Anlaufen.
 "Motortreiber auf Adresse 0x0F antwortet nicht"
     -> Grove-Kabel pruefen, im Terminal  i2cdetect -y 1  ausfuehren und die
        angezeigte Adresse bei addresses=[...] eintragen.
@@ -182,6 +212,7 @@ class _Driver:
     def __init__(self, bus, address):
         self.bus = bus
         self.address = address
+        self.speeds = [0, 0]   # aktuelles Tempo J1, J5 (-255..255)
         try:
             self.bus.write_quick(address)
         except OSError:
@@ -203,9 +234,58 @@ class _Driver:
 
     def set(self, m1, m2):
         """m1, m2: -255..255 (negativ = rueckwaerts)."""
+        self.speeds = [m1, m2]
         direction = (_M1_FWD if m1 >= 0 else _M1_BWD) | (_M2_FWD if m2 >= 0 else _M2_BWD)
         self._write(_REG_DIRECTION, [direction, 0])
         self._write(_REG_SPEED, [min(abs(int(m1)), 255), min(abs(int(m2)), 255)])
+
+    def apply(self):
+        """Gespeicherte Tempi (self.speeds) an das Board schicken."""
+        self.set(*self.speeds)
+
+
+def _parse_address(a):
+    """0x0F, 15 oder "0x0F" -> 15."""
+    if isinstance(a, str):
+        a = int(a, 0)
+    return int(a)
+
+
+def _parse_terminal(t):
+    """"J1"/1 -> 0 (Motor 1),  "J5"/2 -> 1 (Motor 2)."""
+    text = str(t).strip().upper()
+    if text in ("J1", "1", "M1"):
+        return 0
+    if text in ("J5", "2", "M2"):
+        return 1
+    raise ValueError(f"Klemme {t!r} gibt es nicht. Erlaubt: \"J1\" oder \"J5\".")
+
+
+class Motor:
+    """Ein einzelner Motor (Treiber-Adresse + Klemme). Erstellen mit rover.motor(...)."""
+
+    def __init__(self, rover, driver, channel, invert):
+        self._rover = rover
+        self._driver = driver
+        self._channel = channel
+        self.invert = invert
+        self.address = driver.address
+        self.terminal = ("J1", "J5")[channel]
+
+    def speed(self, value, seconds=None):
+        """Tempo -100..100 (negativ = rueckwaerts). Andere Motoren bleiben, wie sie sind."""
+        self._driver.speeds[self._channel] = self._rover._scale(value, self.invert)
+        self._driver.apply()
+        if seconds is not None:
+            time.sleep(seconds)
+            self.stop()
+
+    def stop(self):
+        self._driver.speeds[self._channel] = 0
+        self._driver.apply()
+
+    def __repr__(self):
+        return f"Motor({self.address:#04x}, {self.terminal})"
 
 
 # --- PCA9685 (Grove 16-Kanal PWM-Treiber) fuer Servos ------------------------
@@ -298,11 +378,22 @@ class Ultrasonic(_GrovePort):
 class Rover:
     """Panzer-gelenkter Rover. Siehe User Guide oben in dieser Datei."""
 
-    def __init__(self, addresses=(0x0F,), max_speed=60,
+    def __init__(self, addresses=None, max_speed=60,
                  invert_left=False, invert_right=False,
-                 swap_sides=False, grovepi_address=0x04):
-        if isinstance(addresses, int):
+                 swap_sides=False, grovepi_address=0x04,
+                 left=None, right=None):
+        # left/right: welche Motoren zu welcher Seite gehoeren,
+        # z.B. left=[(0x0F, "J1"), (0x0E, "J1")]
+        left = [(_parse_address(a), _parse_terminal(t)) for a, t in (left or [])]
+        right = [(_parse_address(a), _parse_terminal(t)) for a, t in (right or [])]
+        if addresses is None:
+            addresses = sorted({a for a, _ in left + right}) or [0x0F]
+        if isinstance(addresses, (int, str)):
             addresses = [addresses]
+        addresses = [_parse_address(a) for a in addresses]
+        for a, _ in left + right:
+            if a not in addresses:
+                addresses.append(a)
         self.max_speed = max(0, min(100, max_speed))
         self.invert_left = invert_left
         self.invert_right = invert_right
@@ -313,6 +404,15 @@ class Rover:
         self._used = {}            # belegte Ports -> wofuer
         self._bus = smbus.SMBus(1)
         self._drivers = [_Driver(self._bus, a) for a in addresses]
+        by_addr = {d.address: d for d in self._drivers}
+        if left or right:
+            self._left = [(by_addr[a], ch) for a, ch in left]
+            self._right = [(by_addr[a], ch) for a, ch in right]
+        else:
+            # Standard: auf jedem Treiber J1 = links, J5 = rechts
+            l_ch, r_ch = (1, 0) if swap_sides else (0, 1)
+            self._left = [(d, l_ch) for d in self._drivers]
+            self._right = [(d, r_ch) for d in self._drivers]
 
         atexit.register(self._safe_stop)
         # Auto-Pull-Dienst beendet Programme mit SIGTERM -> trotzdem stoppen
@@ -325,11 +425,12 @@ class Rover:
         """Linke und rechte Seite einzeln, je -100..100."""
         left = self._scale(left, self.invert_left)
         right = self._scale(right, self.invert_right)
+        for d, ch in self._left:
+            d.speeds[ch] = left
+        for d, ch in self._right:
+            d.speeds[ch] = right
         for d in self._drivers:
-            if self.swap_sides:
-                d.set(right, left)     # J1 = rechts, J5 = links
-            else:
-                d.set(left, right)     # J1 = links, J5 = rechts
+            d.apply()
         if seconds is not None:
             time.sleep(seconds)
             self.stop()
@@ -384,6 +485,19 @@ class Rover:
         finally:
             termios.tcsetattr(fd, termios.TCSADRAIN, old)
             self.stop()
+
+    # --- Einzelne Motoren ----------------------------------------------------
+    def motor(self, address=0x0F, terminal="J1", invert=False):
+        """Ein einzelner Motor, z.B. rover.motor(0x0F, "J5").speed(50, seconds=2)."""
+        address = _parse_address(address)
+        for d in self._drivers:
+            if d.address == address:
+                return Motor(self, d, _parse_terminal(terminal), invert)
+        raise ValueError(
+            f"Kein Motortreiber auf {address:#04x}. Bekannt: "
+            + ", ".join(f"{d.address:#04x}" for d in self._drivers)
+            + " -> Adresse bei Rover(addresses=[...]) eintragen."
+        )
 
     # --- Sensoren, Ausgaenge, Servos (Port selber waehlen) --------------------
     def analog(self, port):

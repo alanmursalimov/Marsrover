@@ -99,6 +99,17 @@ rover = Rover()
             ("rover.stop()", "alle Motoren aus"),
             ("rover.wait(1.5)", "1.5 Sekunden warten – Motoren laufen weiter!"),
         ]),
+        Spacer(1, 3 * mm),
+        Paragraph("<b>Einzelne Motoren</b> – Treiber-Adresse und Klemme (J1 oder J5) selber wählen. "
+                  "Die anderen Motoren bleiben, wie sie sind.", body),
+        Spacer(1, 1 * mm),
+        table([
+            ('m = rover.motor(0x0F, "J1")', "Motor an Treiber 0x0F, Klemme J1"),
+            ("m.speed(50)", "vorwärts, läuft weiter"),
+            ("m.speed(-50, seconds=2)", "2 Sekunden rückwärts, dann Stopp"),
+            ("m.stop()", "nur diesen Motor aus"),
+            ('rover.motor(0x0E, "J5", invert=True)', "Motor, der falsch herum dreht"),
+        ], left=78),
     ),
 
     section(
@@ -167,6 +178,9 @@ python3 ~/Marsrover/main.py
             ("Rover(invert_left=True)", "linke Seite dreht falsch herum"),
             ("Rover(swap_sides=True)", "Motoren andersrum eingesteckt: J1 = rechts, J5 = links"),
             ("Rover(grovepi_address=0x04)", "I2C-Adresse des GrovePi (Standard 0x04)"),
+            ('Rover(left=[(0x0F, "J1"), (0x0E, "J1")],<br/>right=[(0x0F, "J5"), (0x0E, "J5")])',
+             "selber festlegen, welche Motoren links und rechts sind (Adresse, Klemme). "
+             "Ersetzt addresses und swap_sides"),
         ]),
         Spacer(1, 1 * mm),
         Paragraph("Mehrere Einstellungen gehen zusammen, z.B. "
@@ -195,7 +209,10 @@ rover.turn_left(50, seconds=1)
             ("sudo systemctl stop marsrover", "Auto-Pull + Auto-Start pausieren"),
             ("sudo systemctl start marsrover", "Auto-Pull wieder einschalten"),
             ("journalctl -u marsrover -f", "Ausgabe vom laufenden Code ansehen"),
-            ("i2cdetect -y 1", "zeigt angeschlossene I2C-Geräte (Motortreiber = 0f)"),
+            ("i2cdetect -y -a 1", "zeigt alle I2C-Geräte (Motortreiber = 0f, GrovePi = 04). "
+                                  "Ohne -a fehlen 0x00–0x07 und 0x78–0x7F"),
+            ("python3 ~/Marsrover/motortest.py", "Motortreiber ohne rover.py testen "
+                                                 "(z.B. motortest.py 0x0F J5 70)"),
         ]),
     ),
 
@@ -209,6 +226,9 @@ rover.turn_left(50, seconds=1)
             "Nie Code direkt auf dem Pi ändern – der nächste Push überschreibt ihn.",
             "Beim Testen Rover hochstellen (Räder in der Luft)!",
             f"Fehler „antwortet nicht“ -&gt; Kabel prüfen, {c('i2cdetect -y 1')}. Treiber Nr. 3 ist defekt.",
+            "Motoren drehen nicht, Treiber antwortet -&gt; Akku an der Strom-Klemme des Treibers? "
+            "LEDs IN1–IN4 an? motortest.py probieren. Tempo 50 bei max_speed=60 ist nur 30 % "
+            "der Akkuspannung.",
             "Fehler „Port ... ist schon belegt“ -&gt; gleichen Port zweimal benutzt.",
             "Fehler „GrovePi-Library fehlt“ -&gt; GrovePi-Software auf dem Pi installieren.",
         ]],
