@@ -6,7 +6,12 @@
   - Boards are numbered with stickers.
   - **Board no. 3 hangs the I2C bus** (even with a different cable) – possibly not faulty after all, see open-questions.md #9.
   - **Board no. 2 works** (address 0x0F) – now used as the RIGHT driver. **Board no. 4** = LEFT driver (left motors turned on 2026-11-10).
-  - Address is set with a 4-way DIP switch (SW1) on each board. Both boards have the same setting (probably 0x0F).
+  - Address is set with a 4-way DIP switch (SW1) on each board. Default 0x0F.
+    The board only reads the switches at start-up → after changing them press **RESET** (or disconnect the battery too;
+    the logic runs from the motor battery, so switching off only the Pi is not enough).
+    Tested 2026-11-11 on board no. 2: switch 1 flipped → 0x07 (switch 1 = 0x08 bit, 0x07 is I2C-reserved);
+    switch 4 flipped instead → **0x0E** (switch 4 = 0x01 bit). Board no. 2 is now set to 0x0E.
+    With it the scan also shows `00` (general call – probably the driver's firmware answering it; harmless).
 - Grove 16-channel PWM driver (PCA9685) for servos.
 - Grove 8-channel I2C hub (TCA9548A). (Alan doesn't remember why he ordered it.)
 - Planned sensors: 2–3 ultrasonic, 2–3 temperature. Also has an M5Stack NCIR (infrared temperature) unit.
