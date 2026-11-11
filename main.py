@@ -2,7 +2,11 @@ from rover import Rover
 from grovepi import *
 from time import sleep
 
-rover = Rover(addresses=[0x0F, 0x0E])
+rover = Rover(
+    left=[(0x0F, "J1"), (0x0F, "J5")],
+    right=[(0x0E, "J1"), (0x0E, "J5")],
+    invert_right=True,                  # rechte Seite dreht andersrum
+)
 
 distance_middle_USS = 2
 distance_right_USS = 8
