@@ -30,5 +30,5 @@ while True:
 
     if value <= 20:
         rover.stop
-    elif value >= 20:
-        rover.forward(70, seconds=5)
+    if value >= 20:
+        rover.forward(70)
