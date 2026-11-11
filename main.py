@@ -22,7 +22,7 @@ def turn_left():
       back_left.speed(70, seconds=2)
 
 try:
-    back_left.speed(100, seconds=5)
+    rover.turn_left(100, seconds=5)
     # while True:
     #     value = ultrasonicRead(distance_middle_USS)##
     #     print("Disnanz ca. = %d cm" %value)
