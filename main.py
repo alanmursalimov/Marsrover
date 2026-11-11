@@ -48,7 +48,7 @@ try:
         sleep(0.03)
         distance_left_USS = ultrasonicRead(left_USS)
 
-        if distance_middle_USS <= 20: #if the distance is under 20cm
+        if distance_middle_USS <= 25: #if the distance is under 20cm
             reverse_and_turn() #run function
             print(distance_middle_USS)
         else:
