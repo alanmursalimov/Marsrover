@@ -21,7 +21,7 @@ front_right = rover.motor(0x0E, "J5", invert=True)
 
 
 try:
-    rover.turn_left(50, seconds=2)
+    rover.turn_left(70, seconds=5)
     # while True:
     #     value = ultrasonicRead(distance_middle_USS)##
     #     print("Disnanz ca. = %d cm" %value)
