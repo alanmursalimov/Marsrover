@@ -19,9 +19,9 @@ front_right = rover.motor(0x0E, "J5", invert=True)
 
 def reverse_and_turn():
     if distance_right_USS > distance_right_USS:
-        rover.turn_right(100, seconds=3)
+        rover.turn_right(100)
     elif distance_right_USS < distance_left_USS:
-        rover.turn_left(100, seconds=3)
+        rover.turn_left(100)
      
 
 
