@@ -45,6 +45,7 @@ try:
 
         if distance_middle_USS <= 20: #if the distance is under 20cm
             reverse_and_turn() #run function
+            print(distance_middle_USS)
         else:
             rover.forward(50) #or drive forward at 70% of max_speed
         sleep(0.1)
