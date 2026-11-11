@@ -30,10 +30,9 @@ def reverse_and_turn():
     Function for turning the rover to the more open side so it avoids obstacles
     '''
     if distance_right_USS > distance_left_USS: #If the right side is more open to the rover
-        rover.turn_right(100, seconds=1) #left side spins at 100% of the max_speed and the right one at half the speed so that it turns
+        rover.turn_left(100, seconds=1) #turns left at 100% speed for 1s
     elif distance_right_USS < distance_left_USS: #if the left side is more open to the rover
-        rover.turn_left(100, seconds=1) # right side spins at 100% of the max_speed and the left one at half the speed so that it turns
-
+        rover.turn_right(100, seconds=1) #turns right at 100% for 1s
 
 
 try:
@@ -49,8 +48,7 @@ try:
             reverse_and_turn() #run function
             print(distance_middle_USS)
         else:
-            rover.forward(50) #or drive forward at 70% of max_speed
-        sleep(0.1)
+            rover.forward(50) #or drive forward at 50% of max_speed
 except KeyboardInterrupt:
         pass
 
