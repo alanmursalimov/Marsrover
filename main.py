@@ -30,9 +30,9 @@ def reverse_and_turn():
     Function for turning the rover to the more open side so it avoids obstacles
     '''
     if distance_right_USS > distance_left_USS: #If the right side is more open to the rover
-        rover.drive(100, 50) #left side spins at 100% of the max_speed and the right one at half the speed so that it turns
+        rover.drive(80, 20) #left side spins at 100% of the max_speed and the right one at half the speed so that it turns
     elif distance_right_USS < distance_left_USS: #if the left side is more open to the rover
-        rover.drive(50, 100) # right side spins at 100% of the max_speed and the left one at half the speed so that it turns
+        rover.drive(20, 80) # right side spins at 100% of the max_speed and the left one at half the speed so that it turns
 
 
 
@@ -40,7 +40,9 @@ try:
     while True:
         #*distances the Ultrasonicsensors measured
         distance_middle_USS = ultrasonicRead(middle_USS)
+        sleep(0.03)
         distance_right_USS = ultrasonicRead(right_USS)
+        sleep(0.03)
         distance_left_USS = ultrasonicRead(left_USS)
 
         if distance_middle_USS <= 20: #if the distance is under 20cm
