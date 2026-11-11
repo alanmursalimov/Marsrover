@@ -4,8 +4,9 @@
 - Raspberry Pi 4 + GrovePi.
 - Grove I2C Motor Driver v1.3 boards: 4 on hand, DIP switches for addresses, 2 needed for 4 motors.
   - Boards are numbered with stickers.
-  - **Board no. 3 hangs the I2C bus** (even with a different cable) → don't use it.
-  - **Board no. 2 works** (address 0x0F).
+  - **Board no. 3 hangs the I2C bus** (even with a different cable) – possibly not faulty after all, see open-questions.md #9.
+  - **Board no. 2 works** (address 0x0F) – now used as the RIGHT driver. **Board no. 4** = LEFT driver (left motors turned on 2026-11-10).
+  - Address is set with a 4-way DIP switch (SW1) on each board. Both boards have the same setting (probably 0x0F).
 - Grove 16-channel PWM driver (PCA9685) for servos.
 - Grove 8-channel I2C hub (TCA9548A). (Alan doesn't remember why he ordered it.)
 - Planned sensors: 2–3 ultrasonic, 2–3 temperature. Also has an M5Stack NCIR (infrared temperature) unit.

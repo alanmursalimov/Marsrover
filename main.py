@@ -9,7 +9,7 @@ distance_right_USS = 8
 distance_left_USS = 6
 
 back_left = rover.motor(0x0F, "J1")
-back_right = rover.motor(0x04, "J1")
+#back_right = rover.motor(0x04, "J1")
 front_left = rover.motor(0x0F, "J5")
 
 

@@ -22,7 +22,19 @@
    TCA9548A hub). **7f missing** → PWM board not seen (plugged in? different address?).
    Check whether the `grovepi` library is installed. Calibrate servo pulse range (`min_us`/`max_us`) per servo.
 8. Exact model of the 10 kg·cm servo (MG996R is only mentioned in earlier chats, not confirmed).
-9. **Motors don't turn (2026-11-10)** although driver 0x0F answers on I2C. Not yet known why. To check: battery on the
-   driver's power terminal, IN1–IN4 LEDs, `motortest.py` at 60–80 %, motor directly on a battery. Note: speed 50 with
-   `max_speed=60` is only 30 % duty (76/255) – may be too little to start (estimate, not measured).
-   Earlier the scan showed no 0x0F at all; what fixed that is not recorded yet.
+9. **Motor drivers stop answering (2026-11-10).** Left driver = **board no. 4**, right driver = **board no. 2**
+   (both work earlier). Both have their 4 DIP switches in the same position (from photos) → probably both 0x0F →
+   one must get a different address before using both.
+   Observed: right board alone → fast but empty scan; both → very slow scan; with the drivers unplugged the scan is
+   normal again (04 back).
+   Battery measured (2026-11-10, no load): one pack about 7.7 V, the other 6.67 V (≈3.3 V/cell, nearly empty).
+   Which pack feeds which board: not recorded yet. Hypothesis: below about 7 V the 78M05 on the driver can't hold 5 V
+   → that board's logic is unstable and can drag the bus down. Both boards on the same address (0x0F) could also
+   explain the slow scan with both plugged in. Neither confirmed yet.
+   Later: board no. 4 alone (7.7 V pack) first gave a fast but empty scan (04 gone too), then after a while it was
+   recognized again – cause unknown. Untested idea if it keeps happening: lower I2C speed
+   (`dtparam=i2c_arm_baudrate=50000` in `/boot/firmware/config.txt`; Pi vs. ATmega8 clock stretching – hypothesis).
+   Last test of the day: the BACK RIGHT motor turned and the left ones didn't, although board no. 4 is the left driver
+   → check wiring (which motor is on which board/terminal) and the `rover.motor(...)` lines in main.py. Alan checks 2026-11-11.
+   If confirmed, board no. 3 was probably not faulty either (same symptom) → retest it.
+   Also note: speed 50 with `max_speed=60` is only 30 % duty – may be too little to start (estimate).
