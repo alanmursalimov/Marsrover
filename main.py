@@ -28,7 +28,7 @@ try:
 
         if value <= 20:
             rover.stop()
-        if value >= 20:
+        else:
             rover.forward(70)
         sleep(0.1)
 except KeyboardInterrupt:
