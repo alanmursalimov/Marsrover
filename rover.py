@@ -378,7 +378,7 @@ class Ultrasonic(_GrovePort):
 class Rover:
     """Panzer-gelenkter Rover. Siehe User Guide oben in dieser Datei."""
 
-    def __init__(self, addresses=None, max_speed=60,
+    def __init__(self, addresses=None, max_speed=80,
                  invert_left=False, invert_right=False,
                  swap_sides=False, grovepi_address=0x04,
                  left=None, right=None):

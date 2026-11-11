@@ -6,7 +6,6 @@ rover = Rover(
     left=[(0x0F, "J1"), (0x0F, "J5")],
     right=[(0x0E, "J1"), (0x0E, "J5")],
     invert_right=True,                  # rechte Seite dreht andersrum
-    max_speed=80
 )
 
 distance_middle_USS = 2
