@@ -39,7 +39,7 @@ def reverse_and_turn():
 try:
     while True:
         #*distances the Ultrasonicsensors measured
-        distance_middle_USS = ultrasonicRead(middle_USS)
+        distance_middle_USS = ultrasonicRead(middle_USS)#
         distance_right_USS = ultrasonicRead(right_USS)
         distance_left_USS = ultrasonicRead(left_USS)
 
