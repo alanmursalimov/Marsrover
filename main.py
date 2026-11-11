@@ -33,6 +33,10 @@ def reverse_and_turn():
         rover.turn_left(100, seconds=1) #turns left at 100% speed for 1s
     elif distance_right_USS < distance_left_USS: #if the left side is more open to the rover
         rover.turn_right(100, seconds=1) #turns right at 100% for 1s
+    if distance_right_USS < 20:
+         rover.turn_left(100, seconds=0.1)
+    if distance_left_USS < 20:
+         rover.turn_right(100, seconds=0.1)
 
 
 try:
