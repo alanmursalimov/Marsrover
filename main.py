@@ -18,19 +18,19 @@ front_left = rover.motor(0x0F, "J5")
 front_right = rover.motor(0x0E, "J5", invert=True)
 
 
-#rover.drive(0, 50)     # nur Motor 2 dreht
-#rover.drive(50, -50)   # Motor 1 im Uhrzeigersinn, Motor 2 dagegen
+
+
 try:
-    while True:
+    rover.turn_left(50, seconds=2)
+    # while True:
+    #     value = ultrasonicRead(distance_middle_USS)##
+    #     print("Disnanz ca. = %d cm" %value)
 
-        value = ultrasonicRead(distance_middle_USS)##
-        print("Disnanz ca. = %d cm" %value)
-
-        if value <= 20:
-            rover.stop()
-        else:
-            rover.forward(70)
-        sleep(0.1)
+    #     if value <= 20:
+    #         rover.stop()
+    #     else:
+    #         rover.forward(70)
+    #     sleep(0.1)
 except KeyboardInterrupt:
         pass
 
