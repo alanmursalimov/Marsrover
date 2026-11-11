@@ -25,7 +25,6 @@ while True:
     try:
         value = ultrasonicRead(distance_middle_USS)##
         print("Disnanz ca. = %d cm" %value)
-        sleep(.5)
     except KeyboardInterrupt:
         break
 
