@@ -2,7 +2,7 @@ from rover import Rover
 from grovepi import *
 from time import sleep
 
-rover = Rover()
+rover = Rover(addresses=[0x0F, 0x0E])
 
 distance_middle_USS = 2
 distance_right_USS = 8
