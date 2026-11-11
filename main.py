@@ -11,6 +11,7 @@ distance_left_USS = 6
 back_left = rover.motor(0x0F, "J1")
 back_right = rover.motor(0x0E, "J1")
 front_left = rover.motor(0x0F, "J5")
+front_right = rover.motor(0x0E, "J5")
 
 
 
