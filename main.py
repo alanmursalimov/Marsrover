@@ -19,8 +19,8 @@ front_right = rover.motor(0x0E, "J5", invert=True)
 
 if distance_middle_USS < 20:
     rover.stop
-
-rover.forward(70, seconds=5)
+else:
+    rover.forward(70, seconds=5)
 #rover.drive(0, 50)     # nur Motor 2 dreht
 #rover.drive(50, -50)   # Motor 1 im Uhrzeigersinn, Motor 2 dagegen
 
