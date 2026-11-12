@@ -153,6 +153,12 @@ langsam erweitern, z.B.:
 Brummt der Servo am Ende oder drueckt gegen den Anschlag -> Bereich
 wieder kleiner machen!
 
+Einstellen (kalibrieren): Pulsbreite direkt ausprobieren mit
+    servo.pulse(1500)                 # Mikrosekunden, 500-2500
+oder interaktiv (Zahlen eintippen, Enter = fertig):
+    servo.calibrate()
+Den Wert bei 0 Grad als min_us, den bei 180 Grad als max_us eintragen.
+
 
 7. BEISPIEL main.py
 -------------------
@@ -350,6 +356,29 @@ class Servo:
         degrees = max(0, min(self.max_angle, degrees))
         us = self.min_us + (self.max_us - self.min_us) * degrees / self.max_angle
         self._board.pulse(self.channel, us)
+
+    def pulse(self, us):
+        """Pulsbreite direkt in Mikrosekunden (500-2500), zum Einstellen."""
+        self._board.pulse(self.channel, max(500, min(2500, us)))
+
+    def calibrate(self):
+        """Interaktiv Pulsbreiten ausprobieren. Leere Eingabe = fertig."""
+        print("Mikrosekunden eingeben (500-2500), Enter ohne Zahl = fertig.")
+        print(f"Jetzt eingestellt: min_us={self.min_us}, max_us={self.max_us}")
+        while True:
+            text = input("us: ").strip()
+            if not text:
+                break
+            try:
+                us = int(text)
+            except ValueError:
+                print("Bitte eine Zahl.")
+                continue
+            if not 500 <= us <= 2500:
+                print("Nur 500-2500 erlaubt.")
+                continue
+            self.pulse(us)
+        print("Werte eintragen: rover.servo(..., min_us=WERT_BEI_0_GRAD, max_us=WERT_BEI_180_GRAD)")
 
     def off(self):
         self._board.off(self.channel)

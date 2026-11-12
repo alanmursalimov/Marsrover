@@ -25,7 +25,9 @@ front_left = rover.motor(0x0F, "J5")
 #Plus it's inversed so it spins into the right direction
 front_right = rover.motor(0x0E, "J5", invert=True)
 
-servo = rover.servo(channel=1, address=0x7F)
+servo1 = rover.servo(channel=0, address=0x7F)
+servo2 = rover.servo(channel=1, address=0x7F)
+
 
 def reverse_and_turn():
     '''
@@ -60,9 +62,14 @@ try:
             else:
                 rover.forward(50) #or drive forward at 50% of max_speed
     elif option == "test":
-         while True:
+        while True:
             angle = int(input("Winkel: "))
-            servo.angle(angle)
+            servo2.angle(angle)
+            servo2.angle(90)
+            servo2.angle(-90)
+            
+
+        
          
 except KeyboardInterrupt:
         pass
