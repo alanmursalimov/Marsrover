@@ -26,7 +26,7 @@ front_left = rover.motor(0x0F, "J5")
 front_right = rover.motor(0x0E, "J5", invert=True)
 
 servo1 = rover.servo(channel=0, address=0x7F, min_us=2300, max_us=500)
-servo2 = rover.servo(channel=1, address=0x7F, min_us=2400, max_us=500)
+servo2 = rover.servo(channel=1, address=0x7F, min_us=2100, max_us=400)
 
 
 def reverse_and_turn():
