@@ -135,11 +135,16 @@ Braucht die GrovePi-Library auf dem Pi (import grovepi).
 6c. SERVOS (Grove 16-Kanal PWM-Treiber, PCA9685)
 ------------------------------------------------
 Adresse und Kanal (0-15) waehlst du selber. Die Adresse siehst du mit
-i2cdetect -y 1 (Seeed-Standard laut Datenblatt: 0x7F - nachpruefen!).
+i2cdetect -y -a 1 (Seeed-Standard: 0x7F, steht auch hinten auf dem Board).
 
     servo = rover.servo(channel=0, address=0x7F)
     servo.angle(90)                   # auf 90 Grad fahren (0-180)
     servo.off()                       # Servo stromlos (haelt nicht mehr)
+
+Haengt der PWM-Treiber am 8-Kanal I2C-Hub (TCA9548A, Adresse 0x70), sucht
+rover.servo() den Hub-Port selber und schreibt ihn auf. Fest einstellen:
+    servo = rover.servo(channel=0, address=0x7F, hub_port=3)   # Hub-Port 3
+    servo = rover.servo(channel=0, address=0x7F, hub_port=None) # ohne Hub
 
 Jeder Servo hat einen etwas anderen Pulsbereich. Standard ist vorsichtig
 1000-2000 us (dann dreht er evtl. weniger als 180 Grad). Fuer mehr Weg
@@ -290,16 +295,20 @@ class Motor:
 
 # --- PCA9685 (Grove 16-Kanal PWM-Treiber) fuer Servos ------------------------
 class _PCA9685:
-    def __init__(self, bus, address, freq=50):
+    def __init__(self, bus, address, freq=50, hub_port=None, hub_address=0x70):
         self.bus = bus
         self.address = address
         self.freq = freq
+        self.hub_port = hub_port        # Port 0-7 am I2C-Hub (TCA9548A) oder None
+        self.hub_address = hub_address
+        self._select()
         try:
             bus.write_quick(address)
         except OSError:
+            wo = "" if hub_port is None else f" (Hub-Port {hub_port})"
             raise RuntimeError(
-                f"PWM-Treiber auf Adresse {address:#04x} antwortet nicht. "
-                "Kabel pruefen und 'i2cdetect -y 1' ausfuehren."
+                f"PWM-Treiber auf Adresse {address:#04x}{wo} antwortet nicht. "
+                "Kabel pruefen und 'i2cdetect -y -a 1' ausfuehren."
             ) from None
         prescale = round(25_000_000 / (4096 * freq)) - 1
         bus.write_byte_data(address, 0x00, 0x10)      # schlafen (noetig fuer Prescale)
@@ -309,13 +318,21 @@ class _PCA9685:
         bus.write_byte_data(address, 0x00, 0x20)
         time.sleep(0.005)
 
+    def _select(self):
+        # Am Hub (TCA9548A) muss der richtige Port eingeschaltet sein,
+        # sonst sieht der Pi den PWM-Treiber nicht.
+        if self.hub_port is not None:
+            self.bus.write_byte(self.hub_address, 1 << self.hub_port)
+
     def pulse(self, channel, us):
         off = round(us * 4096 * self.freq / 1_000_000)
+        self._select()
         self.bus.write_i2c_block_data(self.address, 0x06 + 4 * channel,
                                       [0, 0, off & 0xFF, off >> 8])
 
     def off(self, channel):
         # Bit "FULL OFF" setzen -> kein Signal mehr
+        self._select()
         self.bus.write_i2c_block_data(self.address, 0x06 + 4 * channel, [0, 0, 0, 0x10])
 
 
@@ -520,16 +537,41 @@ class Rover:
         """Grove Ultraschall-Sensor an D2-D8, z.B. rover.ultrasonic("D4")."""
         return Ultrasonic(*self._grove_port(port, "D", "ultrasonic"))
 
-    def servo(self, channel, address=0x7F, min_us=1000, max_us=2000, max_angle=180):
-        """Servo an Kanal 0-15 des PWM-Treibers mit I2C-Adresse address."""
+    def servo(self, channel, address=0x7F, min_us=1000, max_us=2000, max_angle=180,
+              hub_port="auto"):
+        """Servo an Kanal 0-15 des PWM-Treibers mit I2C-Adresse address.
+        hub_port: Port 0-7 am I2C-Hub, None = ohne Hub, "auto" = selber suchen."""
         if not 0 <= channel <= 15:
             raise ValueError(f"Servo-Kanal {channel} gibt es nicht. Erlaubt: 0-15.")
         self._claim(f"PWM {address:#04x} Kanal {channel}", "servo")
         if address not in self._pwm_boards:
-            self._pwm_boards[address] = _PCA9685(self._bus, address)
+            if hub_port == "auto":
+                hub_port = self._find_hub_port(address)
+            self._pwm_boards[address] = _PCA9685(self._bus, address, hub_port=hub_port)
         return Servo(self._pwm_boards[address], channel, min_us, max_us, max_angle)
 
     # --- intern --------------------------------------------------------------
+    def _find_hub_port(self, address, hub_address=0x70):
+        """Sucht, an welchem Hub-Port (0-7) die Adresse antwortet. None = direkt."""
+        def answers(a):
+            try:
+                self._bus.write_quick(a)
+                return True
+            except OSError:
+                return False
+        if not answers(hub_address):
+            return None                     # kein Hub da -> direkt versuchen
+        self._bus.write_byte(hub_address, 0)  # alle Hub-Ports aus
+        if answers(address):
+            return None                     # haengt direkt am Bus
+        for port in range(8):
+            self._bus.write_byte(hub_address, 1 << port)
+            if answers(address):
+                print(f"PWM-Treiber {address:#04x} gefunden an Hub-Port {port}.")
+                return port
+        self._bus.write_byte(hub_address, 0)
+        return None                         # nicht gefunden -> Fehler folgt
+
     def _claim(self, name, what):
         if name in self._used:
             raise ValueError(f"Port {name} ist schon belegt ({self._used[name]}).")

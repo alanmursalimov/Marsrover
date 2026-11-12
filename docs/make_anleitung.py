@@ -151,7 +151,8 @@ python3 ~/Marsrover/main.py
     section(
         "5. Servos (Grove 16-Kanal PWM-Treiber)",
         Paragraph(f"Kanal <b>0 bis 15</b> und I2C-Adresse wählst du selber. "
-                  f"Adresse mit {c('i2cdetect -y 1')} prüfen (Seeed-Standard: 0x7F).", body),
+                  f"Adresse mit {c('i2cdetect -y -a 1')} prüfen (Seeed-Standard: 0x7F). "
+                  f"Hängt der Treiber am I2C-Hub, sucht {c('rover.servo()')} den Hub-Port selber.", body),
         Spacer(1, 2 * mm),
         table([
             ("servo = rover.servo(channel=0, address=0x7F)", "Servo an Kanal 0"),
@@ -159,6 +160,7 @@ python3 ~/Marsrover/main.py
             ("servo.off()", "Servo stromlos – hält nicht mehr"),
             ("rover.servo(channel=1, address=0x7F, min_us=600, max_us=2400)",
              "grösserer Pulsbereich = mehr Weg"),
+            ("rover.servo(channel=0, address=0x7F, hub_port=3)", "Hub-Port fest einstellen (None = ohne Hub)"),
         ], left=95),
         Spacer(1, 1 * mm),
         Paragraph("Standard ist vorsichtig 1000–2000 µs (dreht evtl. weniger als 180 Grad). "

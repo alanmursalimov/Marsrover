@@ -12,7 +12,8 @@
     Tested 2026-11-11 on board no. 2: switch 1 flipped → 0x07 (switch 1 = 0x08 bit, 0x07 is I2C-reserved);
     switch 4 flipped instead → **0x0E** (switch 4 = 0x01 bit). Board no. 2 is now set to 0x0E.
     With it the scan also shows `00` (general call – probably the driver's firmware answering it; harmless).
-- Grove 16-channel PWM driver (PCA9685) for servos.
+- Grove 16-channel PWM driver (PCA9685) for servos. Address **0x7F** (printed on the back). Connected via the I2C hub
+  and to a battery (2026-11-12) – which battery/voltage feeds the servo supply: not recorded yet.
 - Grove 8-channel I2C hub (TCA9548A). (Alan doesn't remember why he ordered it.)
 - Planned sensors: 2–3 ultrasonic, 2–3 temperature. Also has an M5Stack NCIR (infrared temperature) unit.
 - Servos: 2.
@@ -29,5 +30,5 @@
     (Friend's packs are rated 5C.)
   - Option B: soldered 2×AA holder packs (3 in series per string, about 6 AA total) with an on/off switch or connector.
 - Motors are rated 4.5 V → with 7.4–9 V, limit PWM (roughly 55–70% duty, depending on the driver's
-  voltage drop) to avoid overheating and wear. In code: `max_speed=60` default in `rover.py`.
+  voltage drop) to avoid overheating and wear. In code: `max_speed=80` default in `rover.py` (as of 2026-11-12).
 - Fuses: glass fuses 4 A and 8 A on hand, **no fuse holder yet**.
