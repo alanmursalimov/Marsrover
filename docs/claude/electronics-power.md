@@ -15,7 +15,8 @@
 - Grove 16-channel PWM driver (PCA9685) for servos. Address **0x7F** (printed on the back). Connected via the I2C hub
   and its servo supply comes from a 5 V / 3.5 A powerbank via a USB-A cable with crimped wires (2026-11-12).
   Measured 0.93 V at first → powerbank was asleep; after pressing its button the voltage jumped up.
-  Powerbanks can switch off at low current (idle servos) → watch for this.
+  Confirmed 2026-11-12: the powerbank keeps switching off (low current) → button must be pressed again.
+  Seeed wiki: logic runs from Grove VCC (3.3/5 V), servos from the separate "Power In" (5 V DC); hot swapping not supported.
 - Grove 8-channel I2C hub (TCA9548A). (Alan doesn't remember why he ordered it.)
 - Planned sensors: 2–3 ultrasonic, 2–3 temperature. Also has an M5Stack NCIR (infrared temperature) unit.
 - Servos: 2.

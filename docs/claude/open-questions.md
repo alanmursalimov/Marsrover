@@ -40,3 +40,8 @@
    → check wiring (which motor is on which board/terminal) and the `rover.motor(...)` lines in main.py. Alan checks 2026-11-11.
    If confirmed, board no. 3 was probably not faulty either (same symptom) → retest it.
    Also note: speed 50 with `max_speed=60` is only 30 % duty – may be too little to start (estimate).
+10. **Servo power + motor drivers crashing (2026-11-12).** Servo powerbank switches off at low current. Every time Alan
+    presses its button to turn it back on, the motor drivers lose the I2C connection and need RESET.
+    Hypothesis (not confirmed): all servos jump to position at once → current spike / ground bounce → the drivers'
+    ATmega8 I2C firmware hangs. Test: press the button with the servos unplugged – do the drivers still crash?
+    Ideas: separate servo supply without auto-off (e.g. 4×AA), big electrolytic capacitor across servo Power In.

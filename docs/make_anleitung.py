@@ -162,7 +162,7 @@ python3 ~/Marsrover/main.py
              "grösserer Pulsbereich = mehr Weg"),
             ("rover.servo(channel=0, address=0x7F, hub_port=3)", "Hub-Port fest einstellen (None = ohne Hub)"),
             ("servo.pulse(1500)", "Pulsbreite direkt in µs (500–2500), zum Einstellen"),
-            ("servo.calibrate()", "interaktiv in Grad ausprobieren (zeigt die µs dazu)"),
+            ("servo.calibrate()", "Pulsbreiten in µs interaktiv ausprobieren"),
         ], left=95),
         Spacer(1, 1 * mm),
         Paragraph("Standard ist vorsichtig 1000–2000 µs (dreht evtl. weniger als 180 Grad). "

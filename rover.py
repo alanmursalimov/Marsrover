@@ -155,10 +155,10 @@ wieder kleiner machen!
 
 Einstellen (kalibrieren): Pulsbreite direkt ausprobieren mit
     servo.pulse(1500)                 # Mikrosekunden, 500-2500
-oder interaktiv in Grad (Standard-Umrechnung 500-2500 us = 0-180 Grad,
-stimmt nur ungefaehr; zeigt jeweils die us dazu an; Enter = fertig):
+oder interaktiv (Mikrosekunden eintippen, Enter = fertig):
     servo.calibrate()
-Den us-Wert am einen Ende als min_us, den am anderen als max_us eintragen.
+Den Wert bei 0 Grad als min_us, den bei 180 Grad als max_us eintragen.
+Danach faehrt servo.angle(...) in Grad.
 
 
 7. BEISPIEL main.py
@@ -363,27 +363,24 @@ class Servo:
         self._board.pulse(self.channel, max(500, min(2500, us)))
 
     def calibrate(self):
-        """Interaktiv ausprobieren, in Grad (0-180). Leere Eingabe = fertig.
-        Feste Standard-Umrechnung 500-2500 us = 0-180 Grad -> die Grad
-        stimmen je nach Servo nur ungefaehr. min_us/max_us gelten hier nicht."""
-        print("Grad eingeben (0-180), Enter ohne Zahl = fertig.")
-        print("Achtung: Standard-Umrechnung, die Grad stimmen nur ungefaehr.")
+        """Interaktiv Pulsbreiten in Mikrosekunden ausprobieren (500-2500).
+        Leere Eingabe = fertig."""
+        print("Mikrosekunden eingeben (500-2500), Enter ohne Zahl = fertig.")
+        print(f"Jetzt eingestellt: min_us={self.min_us}, max_us={self.max_us}")
         while True:
-            text = input("Grad: ").strip()
+            text = input("us: ").strip()
             if not text:
                 break
             try:
-                deg = float(text)
+                us = int(text)
             except ValueError:
-                print("Bitte eine Zahl.")
+                print("Bitte eine ganze Zahl.")
                 continue
-            if not 0 <= deg <= 180:
-                print("Nur 0-180 erlaubt.")
+            if not 500 <= us <= 2500:
+                print("Nur 500-2500 erlaubt.")
                 continue
-            us = round(500 + 2000 * deg / 180)
             self.pulse(us)
-            print(f"  (= {us} us)")
-        print("Fuer main.py: min_us = us-Wert am einen Ende, max_us = us-Wert am anderen Ende.")
+        print("Fuer main.py: min_us = Wert bei 0 Grad, max_us = Wert bei 180 Grad.")
 
     def off(self):
         self._board.off(self.channel)
