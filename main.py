@@ -73,7 +73,7 @@ try:
         servo2.calibrate() #calibration command from Claudes library
 
     elif option == "wasd":
-        rover.wasd(speed=40)
+        rover.wasd(speed=80)
 
 except KeyboardInterrupt:
         pass
