@@ -64,11 +64,14 @@ try:
     elif option == "test":
         while True:
             angle = int(input("Winkel: "))
-            servo2.angle(angle)
+            servo1.angle(angle)
             servo2.angle(90)
             servo2.angle(-90)
     elif option == "kal":
         servo1.calibrate()
+        while True:
+            servo2.angle(90)
+            servo2.angle(-90)
             
 
         
