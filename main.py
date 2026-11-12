@@ -28,7 +28,7 @@ front_right = rover.motor(0x0E, "J5", invert=True)
 #Servo connections. Servo motors connected on channels which are on the driver. 
 #The driver is connected to port 0x7F on the I2C-Hub. 
 #min_us is the minimum amount of mikroseconds the servo can move and max_us the maximum amount
-servo1 = rover.servo(channel=0, address=0x7F, min_us=2300, max_us=500)
+servo1 = rover.servo(channel=0, address=0x7F, min_us=2225, max_us=480)
 servo2 = rover.servo(channel=1, address=0x7F, min_us=2100, max_us=480)
 
 
