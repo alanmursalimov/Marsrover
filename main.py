@@ -25,7 +25,7 @@ front_left = rover.motor(0x0F, "J5")
 #Plus it's inversed so it spins into the right direction
 front_right = rover.motor(0x0E, "J5", invert=True)
 
-servo1 = rover.servo(channel=0, address=0x7F)
+servo1 = rover.servo(channel=0, address=0x7F, min_us=500, max_us=2400)
 servo2 = rover.servo(channel=1, address=0x7F)
 
 
@@ -70,8 +70,8 @@ try:
     elif option == "kal":
         servo1.calibrate()
         while True:
-            servo2.angle(90)
-            servo2.angle(-90)
+            servo1.angle(90)
+            servo1.angle(-90)
             
 
         
