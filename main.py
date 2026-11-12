@@ -25,6 +25,8 @@ front_left = rover.motor(0x0F, "J5")
 #Plus it's inversed so it spins into the right direction
 front_right = rover.motor(0x0E, "J5", invert=True)
 
+servo = rover.servo(channel=5, address=0x7F)
+
 def reverse_and_turn():
     '''
     Function for turning the rover to the more open side so it avoids obstacles
@@ -42,19 +44,25 @@ def reverse_and_turn():
 
 
 try:
-    while True:
-        #*distances the Ultrasonicsensors measured
-        distance_middle_USS = ultrasonicRead(middle_USS)
-        sleep(0.03)
-        distance_right_USS = ultrasonicRead(right_USS)
-        sleep(0.03)
-        distance_left_USS = ultrasonicRead(left_USS)
+    input = input("auto/wasd/test")
+    if input == "auto":
+        while True:
+            #*distances the Ultrasonicsensors measured
+            distance_middle_USS = ultrasonicRead(middle_USS)
+            sleep(0.03)
+            distance_right_USS = ultrasonicRead(right_USS)
+            sleep(0.03)
+            distance_left_USS = ultrasonicRead(left_USS)
 
-        if distance_middle_USS <= 25: #if the distance is under 20cm
-            reverse_and_turn() #run function
-            print(distance_middle_USS)
-        else:
-            rover.forward(50) #or drive forward at 50% of max_speed
+            if distance_middle_USS <= 25: #if the distance is under 20cm
+                reverse_and_turn() #run function
+                print(distance_middle_USS)
+            else:
+                rover.forward(50) #or drive forward at 50% of max_speed
+    elif input == "test":
+         angle = input(int("angle: "))
+         servo.angle(angle)
+         
 except KeyboardInterrupt:
         pass
 

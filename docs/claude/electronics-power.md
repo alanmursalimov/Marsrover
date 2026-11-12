@@ -13,7 +13,9 @@
     switch 4 flipped instead → **0x0E** (switch 4 = 0x01 bit). Board no. 2 is now set to 0x0E.
     With it the scan also shows `00` (general call – probably the driver's firmware answering it; harmless).
 - Grove 16-channel PWM driver (PCA9685) for servos. Address **0x7F** (printed on the back). Connected via the I2C hub
-  and to a battery (2026-11-12) – which battery/voltage feeds the servo supply: not recorded yet.
+  and its servo supply comes from a 5 V / 3.5 A powerbank via a USB-A cable with crimped wires (2026-11-12).
+  Measured 0.93 V at first → powerbank was asleep; after pressing its button the voltage jumped up.
+  Powerbanks can switch off at low current (idle servos) → watch for this.
 - Grove 8-channel I2C hub (TCA9548A). (Alan doesn't remember why he ordered it.)
 - Planned sensors: 2–3 ultrasonic, 2–3 temperature. Also has an M5Stack NCIR (infrared temperature) unit.
 - Servos: 2.

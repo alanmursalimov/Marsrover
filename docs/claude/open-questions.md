@@ -21,7 +21,7 @@
 7. I2C scan 2026-11-10 (`i2cdetect -y -a 1`): **04** (GrovePi), **0f** (motor driver no. 2), **70** (probably the
    TCA9548A hub). **7f missing** → PWM board not seen. Likely reason: it sits behind the TCA9548A hub, which hides all its ports
    until one is switched on (`servotest.py` now does that) – not confirmed on the Pi yet.
-   Servo supply voltage on the PWM board: check it suits the servos (≈ 5–6 V typical – check the servo labels).
+   Servo test after fixing the powerbank supply (2026-11-12): result not reported yet.
    Check whether the `grovepi` library is installed. Calibrate servo pulse range (`min_us`/`max_us`) per servo.
 8. Exact model of the 10 kg·cm servo (MG996R is only mentioned in earlier chats, not confirmed).
 9. **Motor drivers stop answering (2026-11-10).** Left driver = **board no. 4**, right driver = **board no. 2**
