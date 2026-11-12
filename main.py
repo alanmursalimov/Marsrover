@@ -44,8 +44,8 @@ def reverse_and_turn():
 
 
 try:
-    input = input("auto/wasd/test")
-    if input == "auto":
+    option = input("auto/wasd/test: ")
+    if option == "auto":
         while True:
             #*distances the Ultrasonicsensors measured
             distance_middle_USS = ultrasonicRead(middle_USS)
@@ -59,8 +59,8 @@ try:
                 print(distance_middle_USS)
             else:
                 rover.forward(50) #or drive forward at 50% of max_speed
-    elif input == "test":
-         angle = input(int())
+    elif option == "test":
+         angle = int(input("Winkel: "))
          servo.angle(angle)
          
 except KeyboardInterrupt:
