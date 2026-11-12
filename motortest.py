@@ -1,22 +1,15 @@
-from smbus2 import SMBus
-import time
+from Adafruit_PCA9685 import PCA9685
+from time import sleep
 
-ADDR = 0x70
-KANAL = 0
-bus = SMBus(1)
+pwm = PCA9685()
+pwm.set_pwm_freq(60)  # Set frequency to 60Hz
 
-bus.write_byte_data(ADDR, 0x00, 0x10)   # Sleep
-bus.write_byte_data(ADDR, 0xFE, 121)    # 50 Hz
-bus.write_byte_data(ADDR, 0x00, 0x20)   # Wake + Auto-Increment
-time.sleep(0.01)
+channel = 0
+min_pulse = 150  # Min pulse length out of 4096
+max_pulse = 600  # Max pulse length out of 4096
 
-def winkel(grad):                        # 0..180°
-    ms = 0.5 + grad / 180 * 2.0          # 0.5 ms .. 2.5 ms
-    pulse = round(ms / 20 * 4096)
-    reg = 0x06 + 4 * KANAL
-    bus.write_i2c_block_data(ADDR, reg, [0, 0, pulse & 0xFF, pulse >> 8])
-
-winkel(0)
-time.sleep(1)
-winkel(90)                               # um 90° drehen
-time.sleep(1)
+while True:
+    pwm.set_pwm(channel, 0, min_pulse)
+    sleep(1)
+    pwm.set_pwm(channel, 0, max_pulse)
+    sleep(1)
