@@ -62,13 +62,11 @@ try:
             else:
                 rover.forward(50) #or drive forward at 50% of max_speed
     elif option == "test":
-        motor = input("What motor: ")
         while True:
             angle = int(input("Winkel: "))
-            motor.angle(angle)
+            servo1.angle(angle)
     elif option == "kal":
-        motor = input("What motor: ")
-        motor.calibrate()
+        servo1.calibrate()
             
 
         
