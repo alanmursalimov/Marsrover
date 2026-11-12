@@ -25,6 +25,9 @@ front_left = rover.motor(0x0F, "J5")
 #Plus it's inversed so it spins into the right direction
 front_right = rover.motor(0x0E, "J5", invert=True)
 
+#Servo connections. Servo motors connected on channels which are on the driver. 
+#The driver is connected to port 0x7F on the I2C-Hub. 
+#min_us is the minimum amount of mikroseconds the servo can move and max_us the maximum amount
 servo1 = rover.servo(channel=0, address=0x7F, min_us=2300, max_us=500)
 servo2 = rover.servo(channel=1, address=0x7F, min_us=2100, max_us=480)
 
@@ -61,16 +64,17 @@ try:
                 print(distance_middle_USS)
             else:
                 rover.forward(50) #or drive forward at 50% of max_speed
-    elif option == "test":
+    
+    elif option == "test":#Test block for testing servos
         while True:
-            angle = int(input("Winkel: "))
-            servo2.angle(angle)
-    elif option == "kal":
-        servo2.calibrate()
-            
+            angle = int(input("Winkel: "))#the typed angle
+            servo2.angle(angle) #command for setting the angle. The servo knows where it is
+    elif option == "kal": #calibration option
+        servo2.calibrate() #calibration command from Claudes library
 
-        
-         
+    elif option == "wasd":
+        rover.wasd(speed=40)
+
 except KeyboardInterrupt:
         pass
 
