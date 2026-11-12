@@ -39,7 +39,7 @@
   - Hub auto-search confirmed on the Pi 2026-11-12: PWM board found on **hub port 5**.
   - `servotest.py` and `motortest.py` were removed by Alan (commit 4df6b57).
   - Added 2026-11-12 (tested only with a fake bus): `servo.pulse(us)` (500–2500 µs) and `servo.calibrate()`
-    (type µs values interactively, Enter = done) to find `min_us`/`max_us` per servo.
+    (type degrees 0–180 interactively with a fixed mapping 500–2500 µs = 0–180°, shows the µs; Enter = done) to find `min_us`/`max_us` per servo.
   - Speed 0–100 = % of `max_speed` (not full battery voltage).
   - `drive(left, right, seconds=None)`, `forward`, `backward`, `turn_left`, `turn_right` (tank turn on the spot),
     `stop()`, `wait(s)`, `wasd(speed=50)` (W/A/S/D, space = stop, Q = quit).

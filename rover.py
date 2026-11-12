@@ -155,9 +155,10 @@ wieder kleiner machen!
 
 Einstellen (kalibrieren): Pulsbreite direkt ausprobieren mit
     servo.pulse(1500)                 # Mikrosekunden, 500-2500
-oder interaktiv (Zahlen eintippen, Enter = fertig):
+oder interaktiv in Grad (Standard-Umrechnung 500-2500 us = 0-180 Grad,
+stimmt nur ungefaehr; zeigt jeweils die us dazu an; Enter = fertig):
     servo.calibrate()
-Den Wert bei 0 Grad als min_us, den bei 180 Grad als max_us eintragen.
+Den us-Wert am einen Ende als min_us, den am anderen als max_us eintragen.
 
 
 7. BEISPIEL main.py
@@ -362,23 +363,27 @@ class Servo:
         self._board.pulse(self.channel, max(500, min(2500, us)))
 
     def calibrate(self):
-        """Interaktiv Pulsbreiten ausprobieren. Leere Eingabe = fertig."""
-        print("Mikrosekunden eingeben (500-2500), Enter ohne Zahl = fertig.")
-        print(f"Jetzt eingestellt: min_us={self.min_us}, max_us={self.max_us}")
+        """Interaktiv ausprobieren, in Grad (0-180). Leere Eingabe = fertig.
+        Feste Standard-Umrechnung 500-2500 us = 0-180 Grad -> die Grad
+        stimmen je nach Servo nur ungefaehr. min_us/max_us gelten hier nicht."""
+        print("Grad eingeben (0-180), Enter ohne Zahl = fertig.")
+        print("Achtung: Standard-Umrechnung, die Grad stimmen nur ungefaehr.")
         while True:
-            text = input("us: ").strip()
+            text = input("Grad: ").strip()
             if not text:
                 break
             try:
-                us = int(text)
+                deg = float(text)
             except ValueError:
                 print("Bitte eine Zahl.")
                 continue
-            if not 500 <= us <= 2500:
-                print("Nur 500-2500 erlaubt.")
+            if not 0 <= deg <= 180:
+                print("Nur 0-180 erlaubt.")
                 continue
+            us = round(500 + 2000 * deg / 180)
             self.pulse(us)
-        print("Werte eintragen: rover.servo(..., min_us=WERT_BEI_0_GRAD, max_us=WERT_BEI_180_GRAD)")
+            print(f"  (= {us} us)")
+        print("Fuer main.py: min_us = us-Wert am einen Ende, max_us = us-Wert am anderen Ende.")
 
     def off(self):
         self._board.off(self.channel)
