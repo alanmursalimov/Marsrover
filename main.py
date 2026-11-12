@@ -46,7 +46,7 @@ def reverse_and_turn():
 
 
 try:
-    option = input("auto/wasd/test: ")
+    option = input("auto/wasd/test/kal: ")
     if option == "auto":
         while True:
             #*distances the Ultrasonicsensors measured
@@ -67,6 +67,8 @@ try:
             servo2.angle(angle)
             servo2.angle(90)
             servo2.angle(-90)
+    elif option == "kal":
+        servo1.calibrate()
             
 
         
