@@ -68,9 +68,9 @@ try:
     elif option == "test":#Test block for testing servos
         while True:
             angle = int(input("Winkel: "))#the typed angle
-            servo2.angle(angle) #command for setting the angle. The servo knows where it is
+            servo1.angle(angle) #command for setting the angle. The servo knows where it is
     elif option == "kal": #calibration option
-        servo2.calibrate() #calibration command from Claudes library
+        servo1.calibrate() #calibration command from Claudes library
 
     elif option == "wasd":
         rover.wasd(speed=100)
