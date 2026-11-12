@@ -68,7 +68,7 @@ try:
             servo2.angle(90)
             servo2.angle(-90)
     elif option == "kal":
-        servo1.calibrate()
+        servo2.calibrate()
         while True:
             servo1.angle(90)
             servo1.angle(-90)
