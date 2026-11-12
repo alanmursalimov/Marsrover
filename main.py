@@ -60,7 +60,7 @@ try:
             else:
                 rover.forward(50) #or drive forward at 50% of max_speed
     elif input == "test":
-         angle = input(int("angle: "))
+         angle = input()
          servo.angle(angle)
          
 except KeyboardInterrupt:
