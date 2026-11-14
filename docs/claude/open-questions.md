@@ -45,3 +45,4 @@
     Hypothesis (not confirmed): all servos jump to position at once → current spike / ground bounce → the drivers'
     ATmega8 I2C firmware hangs. Test: press the button with the servos unplugged – do the drivers still crash?
     Ideas: separate servo supply without auto-off (e.g. 4×AA), big electrolytic capacitor across servo Power In.
+    2026-11-14: new powerbank without auto-off in use – servos still don't work; symptom/error message not recorded yet.

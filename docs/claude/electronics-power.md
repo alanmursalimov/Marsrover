@@ -16,6 +16,7 @@
   and its servo supply comes from a 5 V / 3.5 A powerbank via a USB-A cable with crimped wires (2026-11-12).
   Measured 0.93 V at first → powerbank was asleep; after pressing its button the voltage jumped up.
   Confirmed 2026-11-12: the powerbank keeps switching off (low current) → button must be pressed again.
+  2026-11-14: Alan now has a powerbank for the servos that does not switch off (model not recorded).
   Seeed wiki: logic runs from Grove VCC (3.3/5 V), servos from the separate "Power In" (5 V DC); hot swapping not supported.
 - Grove 8-channel I2C hub (TCA9548A). (Alan doesn't remember why he ordered it.)
 - Planned sensors: 2–3 ultrasonic, 2–3 temperature. Also has an M5Stack NCIR (infrared temperature) unit.
