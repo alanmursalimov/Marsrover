@@ -71,16 +71,18 @@ try:
             else:
                 rover.forward(50) #or drive forward at 50% of max_speed
 
-            if value_left_light_sensor > value_right_light_sensor:
-                servo1.angle(0)
-            elif value_left_light_sensor < value_right_light_sensor:
-                servo1.angle(180)
+            
 
 
     elif option == "test":#Test block for testing servos
         while True:
-            angle = int(input("Winkel: "))#the typed angle
-            servo1.angle(angle) #command for setting the angle. The servo knows where it is
+            # angle = int(input("Winkel: "))#the typed angle
+            # servo1.angle(angle) #command for setting the angle. The servo knows where it is
+
+            if value_left_light_sensor > value_right_light_sensor:
+                servo1.angle(0)
+            elif value_left_light_sensor < value_right_light_sensor:
+                servo1.angle(180)
     elif option == "kal": #calibration option
         servo2.calibrate() #calibration command from Claudes library
 
