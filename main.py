@@ -79,9 +79,9 @@ try:
             value_left_light_sensor = analogRead(left_light_sensor)
 
             if value_left_light_sensor > value_right_light_sensor:
-                servo1.angle(0)
-            elif value_left_light_sensor < value_right_light_sensor:
                 servo1.angle(180)
+            elif value_left_light_sensor < value_right_light_sensor:
+                servo1.angle(0)
             
             print(f"left {value_left_light_sensor}" )
             sleep(1)

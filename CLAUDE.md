@@ -8,6 +8,8 @@ This repo holds the rover code that runs on the school Raspberry Pi (hostname `k
 - Reply in the language he writes in (English or German). Code comments/user guides in this repo are German.
 - Honest, critical feedback without softening.
 - Code: targeted minimal fixes, not structural rewrites.
+- **Never edit `main.py`** – it's Alan's own code (school AI rules, and he's learning). Explain the problem
+  and show what to change; he edits it himself. `rover.py` and docs may be changed.
 - Say clearly what is a **calculation**, an **estimate**, or something he should **measure** himself.
 - Ask before assuming dimensions or parts he hasn't confirmed.
 - He'll say when he wants hints instead of direct answers; otherwise just answer.
