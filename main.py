@@ -14,6 +14,12 @@ middle_USS = 2 #middle Ultrasonicsensor digital port
 right_USS = 8 #right Ultrasonicsensor digital port
 left_USS = 6 #left Ultrasonicsensor digital port
 
+right_light_sensor = 0
+left_light_sensor = 2
+
+value_right_light_sensor = analogRead(right_light_sensor)
+value_left_light_sensor = analogRead(left_light_sensor)
+
 #rear left motor connected to the DC-Motor-Driver with the I2C-Address 0x0F at connection J1
 back_left = rover.motor(0x0F, "J1")
 #rear right motor connected to the DC-Motor-Driver with the I2C-Address 0x0E at connection J1. 
@@ -64,7 +70,13 @@ try:
                 print(distance_middle_USS)
             else:
                 rover.forward(50) #or drive forward at 50% of max_speed
-    
+
+            if value_left_light_sensor > value_right_light_sensor:
+                servo1.angle(0)
+            elif value_left_light_sensor < value_right_light_sensor:
+                servo1.angle(180)
+
+
     elif option == "test":#Test block for testing servos
         while True:
             angle = int(input("Winkel: "))#the typed angle
