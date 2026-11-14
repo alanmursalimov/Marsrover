@@ -83,6 +83,11 @@ try:
                 servo1.angle(0)
             elif value_left_light_sensor < value_right_light_sensor:
                 servo1.angle(180)
+            
+            print("left" + value_left_light_sensor)
+            sleep(1)
+            print("right" + value_right_light_sensor)
+            sleep(1)
     elif option == "kal": #calibration option
         servo2.calibrate() #calibration command from Claudes library
 
