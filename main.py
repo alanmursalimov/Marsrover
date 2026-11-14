@@ -17,9 +17,6 @@ left_USS = 6 #left Ultrasonicsensor digital port
 right_light_sensor = 0
 left_light_sensor = 2
 
-value_right_light_sensor = analogRead(right_light_sensor)
-value_left_light_sensor = analogRead(left_light_sensor)
-
 #rear left motor connected to the DC-Motor-Driver with the I2C-Address 0x0F at connection J1
 back_left = rover.motor(0x0F, "J1")
 #rear right motor connected to the DC-Motor-Driver with the I2C-Address 0x0E at connection J1. 
@@ -78,15 +75,17 @@ try:
         while True:
             # angle = int(input("Winkel: "))#the typed angle
             # servo1.angle(angle) #command for setting the angle. The servo knows where it is
+            value_right_light_sensor = analogRead(right_light_sensor)
+            value_left_light_sensor = analogRead(left_light_sensor)
 
             if value_left_light_sensor > value_right_light_sensor:
                 servo1.angle(0)
             elif value_left_light_sensor < value_right_light_sensor:
                 servo1.angle(180)
             
-            print("left" + value_left_light_sensor)
+            print(f"left {value_left_light_sensor}" )
             sleep(1)
-            print("right" + value_right_light_sensor)
+            print(f"right {value_right_light_sensor}")
             sleep(1)
     elif option == "kal": #calibration option
         servo2.calibrate() #calibration command from Claudes library
