@@ -5,18 +5,12 @@ Controls the class Marsrover (KSK). The rover drives on its own and avoids
 obstacles with 3 ultrasonic sensors. A servo turns the solar panel towards
 the brighter side, measured with 2 light sensors.
 
-Start menu options:
-    auto  - drive automatically, avoid obstacles, turn the solar panel
-    wasd  - drive manually with the keyboard (W/A/S/D, space = stop, Q = quit)
-    test  - type an angle to test the solar panel servo
-    kal   - calibrate a servo (find min_us / max_us)
-
 Hardware:
     <Timo mach du das>
 
 External code:
-    rover.py - motor/servo library, written by Claude (AI)
-    grovepi  - Dexter Industries GrovePi library
+    rover.py: motor/servo library, written by Claude (AI)
+    grovepi: Dexter Industries GrovePi library
 
 Authors: Alan Mursalimov, Christian Scanzoni, Timo Möckli
 Date:    17.12.2026
@@ -69,13 +63,19 @@ servo2 = rover.servo(channel=1, address=0x7F, min_us=2100, max_us=480)
 def start_menu():
     '''
     Small start screen for options. Made so that the rover doesn't run away while testing.
+    Start menu options:
+    auto: drive automatically, avoid obstacles, turn the solar panel
+    wasd: drive manually with the keyboard (W/A/S/D, space = stop, Q = quit)
+    test: type an angle to test the solar panel servo
+    kal:  calibrate a servo (find min_us / max_us)
     '''
     try:
-        option = input("auto/wasd/test/kal: ")
-        if option == "auto":
+        #Programm asks what you want to do and you type the option in there
+        option = input("auto/wasd/test/kal: ") 
+        if option == "auto": #auto drive
             while True:
-                drive()
-                solar_panel_turning()
+                drive() #function for driving around and avoiding the obstacles
+                solar_panel_turning() #turning the solar panel to the brighter side
                 
         elif option == "test":#Test block for testing servos
             while True:
@@ -85,7 +85,7 @@ def start_menu():
         elif option == "kal": #calibration option
             servo2.calibrate() #calibration command from Claudes library
 
-        elif option == "wasd":
+        elif option == "wasd": #Control the rover with WASD
             rover.wasd(speed=100)
 
     except KeyboardInterrupt:
@@ -113,7 +113,7 @@ def turn(distance_right_USS, distance_left_USS):
     '''
     Function for turning the rover to the more open side so it avoids obstacles
     '''
-    rover.stop()
+    rover.stop() #fuction made by Claude to make the motors stop turning
     sleep(1)
     ##part for deciding which way to turn##
     if distance_right_USS > distance_left_USS: #If the right side is more open to the rover
