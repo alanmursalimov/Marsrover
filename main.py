@@ -38,20 +38,8 @@ left_USS = 6 #left
 right_light_sensor = 0 #right
 left_light_sensor = 2 #left
 
-#####################################################################################################################
-#UNUSED CODE. USE IT LATER OR DELETE!
-#####################################################################################################################
-#rear left motor connected to the DC-Motor-Driver with the I2C-Address 0x0F at connection J1
-back_left = rover.motor(0x0F, "J1")
-#rear right motor connected to the DC-Motor-Driver with the I2C-Address 0x0E at connection J1. 
-#Plus it's inversed so it spins into the right direction
-back_right = rover.motor(0x0E, "J1", invert=True) 
-#front left motor connected to the DC-Motor-Driver with the I2C-Address 0x0F at connection J5
-front_left = rover.motor(0x0F, "J5")
-#front right motor connected to the DC-Motor-Driver with the I2C-Address 0x0E at connection J5. 
-#Plus it's inversed so it spins into the right direction
-front_right = rover.motor(0x0E, "J5", invert=True)
-#####################################################################################################################
+auto_button = 4
+pinMode(auto_button, 4)
 
 #Servo connections. Servo motors connected on channels which are on the driver. 
 #The driver is connected to the 0x7F address on the I2C-Hub. 
@@ -105,11 +93,10 @@ def drive():
     distance_left_USS = ultrasonicRead(left_USS)
     if distance_middle_USS <= 25: #if the distance is under 25cm
         print(distance_middle_USS)
-    
+        turn(distance_right_USS, distance_left_USS) #run function
     else:
         rover.forward(50) #or drive forward at 50% of max_speed. From Claude's library
-    turn(distance_right_USS, distance_left_USS) #run function
-
+    
 def turn(distance_right_USS, distance_left_USS):
     '''
     Function for turning the rover to the more open side so it avoids obstacles

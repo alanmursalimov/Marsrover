@@ -40,6 +40,8 @@
    → check wiring (which motor is on which board/terminal) and the `rover.motor(...)` lines in main.py. Alan checks 2026-11-11.
    If confirmed, board no. 3 was probably not faulty either (same symptom) → retest it.
    Also note: speed 50 with `max_speed=60` is only 30 % duty – may be too little to start (estimate).
+   2026-11-26: Pi online (Wi-Fi + internet OK, autopull pulled the newest commit 8d4b5c1), but main.py crashes at start:
+   "Motortreiber auf Adresse 0x0e antwortet nicht". `i2cdetect -y -a 1` was very slow and found nothing (04 missing too) → bus hung again.
 10. **Servo power + motor drivers crashing (2026-11-12).** Servo powerbank switches off at low current. Every time Alan
     presses its button to turn it back on, the motor drivers lose the I2C connection and need RESET.
     Hypothesis (not confirmed): all servos jump to position at once → current spike / ground bounce → the drivers'
