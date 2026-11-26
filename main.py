@@ -19,7 +19,7 @@ External code:
     grovepi  - Dexter Industries GrovePi library
 
 Authors: Alan Mursalimov, Christian Scanzoni, Timo Möckli
-Date:    <Datum>
+Date:    17.12.2026
 '''
 
 
