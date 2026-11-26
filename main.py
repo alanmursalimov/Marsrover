@@ -70,30 +70,24 @@ def start_menu():
     kal:  calibrate a servo (find min_us / max_us)
     '''
     try:
-        while True:
-            drive() #function for driving around and avoiding the obstacles
-            solar_panel_turning() #turning the solar panel to the brighter side
-
-
-
         #Programm asks what you want to do and you type the option in there
-    #     option = input("auto/wasd/test/kal: ") 
-    #     option = "auto"
-    #     if option == "auto": #auto drive
-    #         while True:
-    #             drive() #function for driving around and avoiding the obstacles
-    #             solar_panel_turning() #turning the solar panel to the brighter side
+        option = input("auto/wasd/test/kal: ") 
+        option = "auto"
+        if option == "auto": #auto drive
+            while True:
+                drive() #function for driving around and avoiding the obstacles
+                solar_panel_turning() #turning the solar panel to the brighter side
                 
-    #     elif option == "test":#Test block for testing servos
-    #         while True:
-    #             angle = int(input("Winkel: "))#the typed angle
-    #             solar_panel_servo.angle(angle) #command for setting the angle. The servo knows where it is. Made by Claude
+        elif option == "test":#Test block for testing servos
+            while True:
+                angle = int(input("Winkel: "))#the typed angle
+                solar_panel_servo.angle(angle) #command for setting the angle. The servo knows where it is. Made by Claude
 
-    #     elif option == "kal": #calibration option
-    #         servo2.calibrate() #calibration command from Claudes library
+        elif option == "kal": #calibration option
+            servo2.calibrate() #calibration command from Claudes library
 
-    #     elif option == "wasd": #Control the rover with WASD
-    #         rover.wasd(speed=100) #Claude's Code for driving around with WASD
+        elif option == "wasd": #Control the rover with WASD
+            rover.wasd(speed=100) #Claude's Code for driving around with WASD
 
     except KeyboardInterrupt:
         pass
