@@ -72,6 +72,7 @@ def start_menu():
     try:
         #Programm asks what you want to do and you type the option in there
         option = input("auto/wasd/test/kal: ") 
+        option = "auto"
         if option == "auto": #auto drive
             while True:
                 drive() #function for driving around and avoiding the obstacles
@@ -80,13 +81,13 @@ def start_menu():
         elif option == "test":#Test block for testing servos
             while True:
                 angle = int(input("Winkel: "))#the typed angle
-                solar_panel_servo.angle(angle) #command for setting the angle. The servo knows where it is
+                solar_panel_servo.angle(angle) #command for setting the angle. The servo knows where it is. Made by Claude
 
         elif option == "kal": #calibration option
             servo2.calibrate() #calibration command from Claudes library
 
         elif option == "wasd": #Control the rover with WASD
-            rover.wasd(speed=100)
+            rover.wasd(speed=100) #Claude's Code for driving around with WASD
 
     except KeyboardInterrupt:
         pass
@@ -102,12 +103,12 @@ def drive():
     distance_right_USS = ultrasonicRead(right_USS)
     sleep(0.03)
     distance_left_USS = ultrasonicRead(left_USS)
-        
     if distance_middle_USS <= 25: #if the distance is under 25cm
-        turn(distance_right_USS, distance_left_USS) #run function
         print(distance_middle_USS)
+    
     else:
         rover.forward(50) #or drive forward at 50% of max_speed. From Claude's library
+    turn(distance_right_USS, distance_left_USS) #run function
 
 def turn(distance_right_USS, distance_left_USS):
     '''
@@ -143,6 +144,9 @@ def solar_panel_turning():
         solar_panel_servo.angle(180) #Claude's code from the library. Controls the servo and spins it to a desired angle
     elif value_left_light_sensor < value_right_light_sensor:
         solar_panel_servo.angle(0)
+
+def heat_seaker():
+    pass
 
 
 
