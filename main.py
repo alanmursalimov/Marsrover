@@ -112,9 +112,9 @@ def turn(distance_right_USS, distance_left_USS):
     ##another part which also makes use of the side ultrasonicsensors. Makes the rover "smarter"##
     #if the distance from the right/left side is under 20 it should turn to the opposing side
     if distance_right_USS < 20:
-         rover.turn_left(100, seconds=0.1) #turns left for 0.1 seconds at full speed. Function from Claude's library
+         rover.turn_left(100, seconds=0.8) #turns left for 0.1 seconds at full speed. Function from Claude's library
     elif distance_left_USS < 20:
-         rover.turn_right(100, seconds=0.1)
+         rover.turn_right(100, seconds=0.8)
 
 
 def solar_panel_turning():
