@@ -91,10 +91,18 @@ def drive():
     distance_right_USS = ultrasonicRead(right_USS)
     sleep(0.03)
     distance_left_USS = ultrasonicRead(left_USS)
-    if distance_middle_USS <= 30: #if the distance is under 25cm
-        turn(distance_right_USS, distance_left_USS) #run function
+
+    if distance_middle_USS <= 30: #if the distance is under 30cm
+        turn(distance_right_USS, distance_left_USS) #run function turn
+    ##another part which also makes use of the side ultrasonicsensors. Makes the rover "smarter"##
+    #if the distance from the right/left side is under 20 it should turn to the opposing side
+    elif distance_right_USS < 40: #40 because it's going in a diagonal (sin(15°))
+         rover.turn_left(100, seconds=0.1) #turns left for 0.1 seconds at full speed. Function from Claude's library
+    elif distance_left_USS < 40:
+         rover.turn_right(100, seconds=0.1)
     else:
         rover.forward(50) #or drive forward at 50% of max_speed. From Claude's library
+    
 
     print(f"right:{distance_right_USS}")
     print(f"left:{distance_left_USS}")
@@ -107,17 +115,11 @@ def turn(distance_right_USS, distance_left_USS):
     sleep(1)
     ##part for deciding which way to turn##
     if distance_right_USS > distance_left_USS: #If the right side is more open to the rover
+        rover.turn_right(100, seconds=1) #turns right at 100% speed for 1s
+    else: #if the left side is more open to the rover
         rover.turn_left(100, seconds=1) #turns left at 100% speed for 1s
-    elif distance_right_USS < distance_left_USS: #if the left side is more open to the rover
-        rover.turn_right(100, seconds=1) #turns right at 100% for 1s
 
-    ##another part which also makes use of the side ultrasonicsensors. Makes the rover "smarter"##
-    #if the distance from the right/left side is under 20 it should turn to the opposing side
-    if distance_right_USS < 20:
-         rover.turn_left(100, seconds=0.1) #turns left for 0.1 seconds at full speed. Function from Claude's library
-    elif distance_left_USS < 20:
-         rover.turn_right(100, seconds=0.1)
-
+    
 
 def solar_panel_turning():
     '''

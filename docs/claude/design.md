@@ -31,6 +31,9 @@
 ## Control
 - Raspberry Pi 4 + GrovePi, driven from the keyboard with WASD. Speed should stay slow.
 
+## Sensors
+- 3 ultrasonic sensors at the front: middle points straight ahead, left/right ones angled **15°** outwards (Alan, 2026-11-26).
+
 ## CAD
 - Alan prefers Fusion. Wheel hub design and CAD still to do (see open-questions.md).
 
